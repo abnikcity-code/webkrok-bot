@@ -95,8 +95,8 @@ const SIZE_LABELS = {
 
 // приклади кейсів під кожну послугу — заміни на свої посилання/фото пізніше
 const CASE_EXAMPLES = {
-  website: 'Приклад: каталог TYOMKA.UA — https://tyomka-catalog.vercel.app',
-  landing: 'Приклад: лендінг для триколісного велосипеда tyomka.ua',
+  website: 'Приклади: каталог TYOMKA.UA — https://tyomka-katalog-mu.vercel.app/\nкаталог "Колиска" — https://kolyska.vercel.app/',
+  landing: 'Приклад: https://landing-webkrok1.vercel.app/',
   sheets: 'Приклад: каталог, який синхронізується з Google Таблицею в реальному часі',
   complex: 'Приклад: реклама → лендінг → Telegram-бот замовлень (весь шлях клієнта)',
 };
@@ -125,7 +125,15 @@ async function handleCallback(query) {
   const data = query.data;
   const [step, ...rest] = data.split(':');
 
-  if (step === 'svc') {
+  if (data === 'restart') {
+    sessions.delete(chatId);
+    await tg('editMessageText', {
+      chat_id: chatId,
+      message_id: query.message.message_id,
+      text: '👋 Що вас цікавить?',
+      reply_markup: mainMenuKeyboard(),
+    });
+  } else if (step === 'svc') {
     const svc = rest[0];
     sessions.set(chatId, { service: svc });
     await tg('editMessageText', {
@@ -155,7 +163,7 @@ async function handleCallback(query) {
     await tg('editMessageText', {
       chat_id: chatId,
       message_id: query.message.message_id,
-      text: `${CASE_EXAMPLES[svc]}\n\nЗалиште номер — і я передам заявку Антону, він зв'яжеться з вами:`,
+      text: `${CASE_EXAMPLES[svc]}\n\nЗалиште номер — і я передам заявку менеджеру, він зв'яжеться з вами:`,
     });
     await tg('sendMessage', {
       chat_id: chatId,
@@ -197,8 +205,16 @@ async function handleContact(message) {
 
   await tg('sendMessage', {
     chat_id: chatId,
-    text: 'Дякую! Заявку передано Антону — він зв\'яжеться з вами найближчим часом. 🙌',
+    text: 'Дякую! Заявку передано менеджеру — він зв\'яжеться з вами найближчим часом. 🙌',
     reply_markup: { remove_keyboard: true },
+  });
+
+  await tg('sendMessage', {
+    chat_id: chatId,
+    text: 'Якщо цікавить ще щось — тисни нижче 👇',
+    reply_markup: {
+      inline_keyboard: [[{ text: '🔄 Розпочати', callback_data: 'restart' }]],
+    },
   });
 
   sessions.delete(chatId);
