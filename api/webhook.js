@@ -95,7 +95,7 @@ const SIZE_LABELS = {
 
 // приклади кейсів під кожну послугу — заміни на свої посилання/фото пізніше
 const CASE_EXAMPLES = {
-  website: 'Приклади: каталог TYOMKA.UA — https://tyomka-katalog-mu.vercel.app/\nкаталог "Колиска" — https://kolyska.vercel.app/',
+  website: 'Приклади: каталог TYOMKA — https://tyomka-katalog-mu.vercel.app/\nкаталог "Колиска" — https://kolyska.vercel.app/',
   landing: 'Приклад: https://landing-webkrok1.vercel.app/',
   sheets: 'Приклад: каталог, який синхронізується з Google Таблицею в реальному часі',
   complex: 'Приклад: реклама → лендінг → Telegram-бот замовлень (весь шлях клієнта)',
